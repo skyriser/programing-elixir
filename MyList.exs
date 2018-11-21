@@ -28,4 +28,10 @@ defmodule MyList do
   def caesar([], _), do: []
   def caesar([head | tail], n) when (head + n) > 122, do: [head + n - 26 | caesar(tail, n)]
   def caesar([head | tail], n) when (head + n) < 122, do: [head + n | caesar(tail, n)]
+
+  # ListsAndRecursion-4
+  # > MyList.span(1,10)
+  # [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
+  def span(to, to), do: [to]
+  def span(from, to), do: [from | span(from + 1, to)]
 end
