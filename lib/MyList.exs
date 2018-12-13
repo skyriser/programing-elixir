@@ -34,4 +34,62 @@ defmodule MyList do
   # [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
   def span(to, to), do: [to]
   def span(from, to), do: [from | span(from + 1, to)]
+
+  # ListsAndRecursion-5-1
+  # iex(2)> MyList.all?([1, 2, 3, 4, 5], &(&1 < 4))
+  # false
+  # iex(6)> MyList.all?([1, 2, 3], &(&1 < 4))
+  # true
+  # iex(2)> MyList.all?([], &(&1 < 4))
+  # true
+  def all?(list, func), do: _all?(list, func)
+  defp _all?([], _func), do: true
+  defp _all?([head | tail], func), do: func.(head) && _all?(tail, func)
+
+  # ListsAndRecursion-5-2
+  # iex(3)> Enum.each([1, 2, 3], &(IO.inspect(&1)))
+  # 1
+  # 2
+  # 3
+  # :ok
+  def each(list, func), do: _each(list, func)
+  defp _each([], _func), do: :ok
+  defp _each([head | tail], func) do
+    func.(head)
+    _each(tail, func)
+  end
+
+  # ListsAndRecursion-5-3
+  # iex(1)> MyList.filter([1, 2, 3], &(&1 > 1))
+  # [2, 3]
+  def filter(list, func), do: _filter(list, func)
+  defp _filter([], _func), do: []
+  defp _filter([head | tail], func) do
+    if func.(head) do
+      [head | _filter(tail, func)]
+    else
+      _filter(tail, func)
+    end
+  end
+
+  # ListsAndRecursion-5-4
+  # iex(4)> MyList.split([1, 2, 3, 4], 3)
+  # {[1, 2, 3], [4]}
+  # iex(5)> MyList.split([], 3)
+  # {[], []}
+  def split(list, count), do: {_lsplit(list, count), _rsplit(list, count)}
+  defp _lsplit([], _count), do: []
+  defp _lsplit(_list, 0), do: []
+  defp _lsplit([head | tail], count), do: [head | _lsplit(tail, count - 1)]
+  defp _rsplit([], _count), do: []
+  defp _rsplit(list, 0), do: list
+  defp _rsplit([_head | tail], count), do: _rsplit(tail, count - 1)
+
+  # ListsAndRecursion-5-5
+  # iex(5)> MyList.take([1, 2, 3, 4], 3)
+  # [1, 2, 3]
+  def take(list, count), do: _take(list, count)
+  defp _take([], _count), do: []
+  defp _take(_list, 0), do: []
+  defp _take([head | tail], count), do: [head | _take(tail, count - 1)]
 end
