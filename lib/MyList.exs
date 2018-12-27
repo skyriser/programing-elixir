@@ -92,4 +92,14 @@ defmodule MyList do
   defp _take([], _count), do: []
   defp _take(_list, 0), do: []
   defp _take([head | tail], count), do: [head | _take(tail, count - 1)]
+
+  # ListsAndRecursion-6
+  # ex(1)> MyList.flatten([1, [2, 3, [4]], 5, [[[6]], 7], 8])
+  # [1, 2, 3, 4, 5, 6, 7, 8]
+  # iex(2)> MyList.flatten([1, [2, 3, [4]], 5, [[[6]]]])
+  # [1, 2, 3, 4, 5, 6]
+  def flatten(list), do: _flatten(list)
+  defp _flatten([]), do: []
+  defp _flatten([head | tail]), do: _flatten(head) ++ _flatten(tail)
+  defp _flatten(element), do: [element]
 end
