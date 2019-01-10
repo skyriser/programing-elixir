@@ -102,4 +102,19 @@ defmodule MyList do
   defp _flatten([]), do: []
   defp _flatten([head | tail]), do: _flatten(head) ++ _flatten(tail)
   defp _flatten(element), do: [element]
+
+  # ListsAndRecursion-7
+  # Eratosthenes algorythm (https://mathtrain.jp/eratosthenes)
+  # iex(2)> MyList.prime_numbers(50)
+  # [2, 3, 5, 7, 11, 13, 17, 19, 23, 29, 31, 37, 41, 43, 47]
+  def prime_numbers(to) when to > 1, do: _prime_numbers(span(2, to), to)
+  defp _prime_numbers(list = [head | tail], to) do
+    if (:math.sqrt(to) < head) do # root(to)を超えたら終了
+      list
+    else
+      # 先頭の倍数をすべてfilter
+      mutiple_filtered_list = for x <- list, rem(x, head) != 0, do: x
+      [head | _prime_numbers(mutiple_filtered_list, to)]
+    end
+  end
 end
