@@ -26,4 +26,61 @@ defmodule Parse do
   defp _printable?([head | _tail]) when head > 126, do: false
   defp _printable?([_head | tail]), do: _printable?(tail)
   defp _printable?(_char), do: true
+
+  # StringsAndBinaries-2
+  # シングルクォートの場合は単なるリスト
+  # iex(1)> Parse.anagram?('elixir', 'eliirx')
+  # true
+  # iex(2)> Parse.anagram?('elixir', 'eliirX')
+  # false
+  def anagram?(word1, word2), do: Enum.sort(word1) === Enum.sort(word2)
+
+  # StringsAndBinaries-3
+  # iex(4)> ['cat' | 'dog']
+  # ['cat', 100, 111, 103]
+  #
+  # シングルクォートの場合は文字列ではなく単なるリスト
+  # 'dog'も[100, 111, 103]というリストである
+  # ex(10)> [100, 111, 103]
+  # 'dog'
+  #
+  # [head | tail] 形式なので後尾にtailというリストを追加することになる
+  # headはリストとしてprintableであるので文字列として表示される
+  # tailは"まずリストとして解釈されたあと"、追加されることになる
+  # (tailがprintableであるかどうかにかかわらず3つの要素である整数リストとして追加されるということ
+  #
+  # シンプルに理解するならば
+  # ex(16)> [[99, 97, 116] | [100, 111, 103]]
+  # ['cat', 100, 111, 103]
+  #
+  # であるし、もっと正確に書くならば
+  # iex(17)> [[99, 97, 116], 100, 111, 103]
+  # ['cat', 100, 111, 103]
+  # という結果になっている
+
+  # StringsAndBinaries-4
+  # ex(1)> Parse.calculate('123 + 27')
+  # 150
+  # iex(2)> Parse.calculate('123 - 27')
+  # 96
+  # iex(3)> Parse.calculate('123 * 27')
+  # 3321
+  # iex(4)> Parse.calculate('123 / 27')
+  # 4.555555555555555
+  def calculate(formula) do
+    # '123 + 27' => {'123 ', '+ 27}
+    {num1, num2_with_operator} = Enum.split_while(formula, fn(x) -> x not in '+-*/' end)
+    # '+ 27' => {'+', ' 27'}
+    {operator, num2} = Enum.split_while(num2_with_operator, fn(x) -> x in '+-*/' end)
+    # ' 'を排除
+    num1 = Enum.filter(num1, fn(x) -> x != 32 end)
+    num2 = Enum.filter(num2, fn(x) -> x != 32 end)
+
+    _operate(num1, num2, operator)
+  end
+
+  defp _operate(num1, num2, operator) when operator == '+', do: number(num1) + number(num2)
+  defp _operate(num1, num2, operator) when operator == '-', do: number(num1) - number(num2)
+  defp _operate(num1, num2, operator) when operator == '*', do: number(num1) * number(num2)
+  defp _operate(num1, num2, operator) when operator == '/', do: number(num1) / number(num2)
 end
