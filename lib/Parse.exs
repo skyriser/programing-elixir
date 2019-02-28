@@ -78,9 +78,38 @@ defmodule Parse do
 
     _operate(num1, num2, operator)
   end
-
   defp _operate(num1, num2, operator) when operator == '+', do: number(num1) + number(num2)
   defp _operate(num1, num2, operator) when operator == '-', do: number(num1) - number(num2)
   defp _operate(num1, num2, operator) when operator == '*', do: number(num1) * number(num2)
   defp _operate(num1, num2, operator) when operator == '/', do: number(num1) / number(num2)
+
+  # StringsAndBinaries-5
+  # iex(1)> Parse.center(["cat", "zebra", "elephant"])
+  #   cat
+  #  zebra
+  # elephant
+  # :ok
+  # iex(3)> Parse.center(["あ", "zeいra", "eleうaえt"])
+  #    あ
+  #  zeいra
+  # eleうaえt
+  # ex(2)> Parse.center(["a", "bb", "ccccc"])
+  #   a
+  #  bb
+  # ccccc
+  # :ok
+  def center(strings) do
+    max_length = _max_length(strings)
+    Enum.each(strings, fn
+      string ->
+        pad_count = String.length(string) + _lpad_count(string, max_length)
+        # rjustはdeprecated
+        IO.puts(String.pad_leading(string, pad_count))
+    end)
+  end
+  # バイナリ内の最大長を計算
+  defp _max_length(strings), do: String.length(Enum.max_by(strings, fn x -> String.length(x) end))
+  # 左右で均等にスペースが分布するとは限らない (ex) max = 5ならleft = 2, right = 3に分離する
+  # rpadはスペースになるだけなので事実上不要
+  defp _lpad_count(string, max_length), do: trunc((max_length - String.length(string)) / 2)
 end
