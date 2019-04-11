@@ -19,4 +19,12 @@ defmodule Flow do
         n
     end
   end
+
+  # ControlFlow-2
+  # 制御構文の使い分けについては以下が参考になる
+  # https://elixir-lang.org/getting-started/case-cond-and-if.html
+  # 可読性ならcase。条件考慮を1条件に絞れるので見やすい。
+  # condは評価条件が複雑な場合に使う？(でもそれってそもそも条件を他関数に分離するべきでは)
+  # ガード節付き関数は冗長になりやすい気がする
+  # 実際のコードを書く際は、これらの使い分けはコンテクスト次第で考えたい
 end
