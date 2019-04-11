@@ -112,4 +112,35 @@ defmodule Parse do
   # 左右で均等にスペースが分布するとは限らない (ex) max = 5ならleft = 2, right = 3に分離する
   # rpadはスペースになるだけなので事実上不要
   defp _lpad_count(string, max_length), do: trunc((max_length - String.length(string)) / 2)
+
+  # StringsAndBinaries-6
+  # 不完全版 最後尾に"."が残る
+  # 空のEnumを排除する必要がある
+  # iex(1)> Parse.capitalize_sentences("oh. a DOG. woof. ")
+  # "Oh. A dog. Woof. ."
+  def capitalize_sentences(paragraph) do
+    # ". "ごとに区切り、sentenceごとにcapitalizeしてjoin
+    paragraph
+    |> _split
+    |> _add_period
+    |> _capitalize
+    |> _join
+  end
+  defp _split(paragraph), do: String.split(paragraph, ". ")
+  defp _add_period(sentences) do
+    Enum.map sentences, fn sentence ->
+      case String.ends_with?(sentence, ".") do
+        true ->
+          sentence
+        false ->
+          sentence <> "."
+      end
+    end
+  end
+  defp _capitalize(sentences) do
+    Enum.map sentences, fn sentence ->
+      String.capitalize(sentence)
+    end
+  end
+  defp _join(sentences), do: Enum.join(sentences, " ")
 end
