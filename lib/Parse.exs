@@ -143,4 +143,14 @@ defmodule Parse do
     end
   end
   defp _join(sentences), do: Enum.join(sentences, " ")
+
+  # StringsAndBinaries-7
+  def total_amount do
+    # tax_rates = [NC: 0.075, TX: 0.08]
+    {:ok, file} = File.open("../etc/ship_list.csv")
+    Enum.map IO.stream(file, :line), fn line ->
+      IO.puts(line)
+    end
+    File.close(file)
+  end
 end
